@@ -10,3 +10,6 @@ class ReadyQueue:
     def fetchNextProcess(self):
         return self.queuing_list.pop(0)
     
+    def getQueueList(self):
+        return self.queuing_list
+    
