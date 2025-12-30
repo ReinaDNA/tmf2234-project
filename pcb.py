@@ -10,6 +10,8 @@ class Pcb:
         self.turnaround_time = 0
         self.waiting_time = 0
         
-        
+    def getProgramNumber(self):
+        return self.program_number
+            
     def getArrivalTime(self):
         return self.arrival_time
