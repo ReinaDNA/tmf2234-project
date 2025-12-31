@@ -1,19 +1,9 @@
 from pcb import Pcb
-from queues import ReadyQueue
 from CPU import CPU
-
+from scheduler import Scheduler
 TIME_QUANTUM = 3
 
-def processChecker(time, job_list:list[Pcb]) -> ReadyQueue:
-    arrived_jobs = ReadyQueue()
-    if job_list:
-        for job in job_list:
-            if job.getArrivalTime() <= time:
-                arrived_jobs.addProcess(job)
-        for job in arrived_jobs.getQueueList():
-            job_list.remove(job)
 
-    return arrived_jobs
 
 def main():
     #Universal clock timer
@@ -23,7 +13,8 @@ def main():
     for i in range(100):
         job_list.append(Pcb(i+1))
     cpu = CPU(TIME_QUANTUM)
-    available_jobs = processChecker(time, job_list)
+    scheduler = Scheduler(job_list)
+    available_jobs = scheduler.processChecker(time)
     if available_jobs and cpu.checkIsIdle():
         cpu.fetchNextProcess(available_jobs)
         processing_time = cpu.executeProcess()
