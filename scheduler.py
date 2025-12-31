@@ -7,9 +7,10 @@ class Scheduler:
 
     def processChecker(self, time):
         if self.available_jobs:
-            for job in self.available_jobs:
+            for i, job in enumerate(self.available_jobs):
                 if job.getArrivalTime() <= time:
-                    self.ready_queue.addProcess(job)
-            for job in self.ready_queue.getQueueList():
-                self.available_jobs.remove(job)
+                    print(f"Job {job.getProgramNumber()} arrived at {job.getArrivalTime()}")
+                    ready_job = self.available_jobs.pop(i)
+                    self.ready_queue.addProcess(ready_job)
+                    print(f"Job {job.getProgramNumber()} added to ready queue")
         return self.ready_queue
