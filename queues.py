@@ -8,5 +8,11 @@ class ReadyQueue:
         self.queuing_list.append(newProcess)
 
     def fetchNextProcess(self):
-        return self.queuing_list.pop(0)
+        if self.queuing_list:
+            return self.queuing_list.pop(0)
+        else:
+            print("No process found.")
+            
+    def getQueueList(self):
+        return self.queuing_list
     

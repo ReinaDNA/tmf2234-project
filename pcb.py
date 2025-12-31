@@ -34,6 +34,10 @@ class Pcb:
         else:
             print("Error, invalid state.")
     
+    def markAsComplete(self):
+        self.burst_time = 0
+        self.changeState(Pcb.COMPLETED)
+
     def setBurstTime(self, newBurst):
         self.burst_time = newBurst
         
