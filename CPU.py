@@ -31,6 +31,7 @@ class CPU:
                 self.current_process.setBurstTime(remaining_burst_time)
                 self.current_process.changeState(Pcb.READY)
                 self.state = CPU.IDLE
+                print(f"burst remaining for {self.current_process.getProgramNumber()}: {self.current_process.getBurstTime()}")
                 print("Process Executed")
                 return execution_time
             elif remaining_burst_time == 0:
