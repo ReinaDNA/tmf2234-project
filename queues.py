@@ -17,6 +17,12 @@ class ReadyQueue:
     def getQueueList(self):
         return self.queuing_list
     
+    def isEmpty(self):
+        if len(self.queuing_list) == 0:
+            return True
+        else:
+            return False
+
 class CompletedQueue:
     def __init__(self):
         self.completed_list: list[Pcb] = []

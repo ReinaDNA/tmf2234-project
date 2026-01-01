@@ -7,18 +7,25 @@ class Scheduler:
 
     def filterAvailableProcess(self, time):
         not_ready_jobs: list[Pcb] = []
+        new_ready_jobs: list[Pcb] = []
         if self.available_jobs:
             for job in self.available_jobs:
                 if job.getArrivalTime() <= time:
-                    print(f"Job {job.getProgramNumber()} arrived at {job.getArrivalTime()}")
-                    self.ready_queue.addProcess(job)
-                    print(f"Job {job.getProgramNumber()} added to ready queue")
+                    new_ready_jobs.append(job)
+                    print(f"Job {job.getProgramNumber()} arrived at {job.getArrivalTime()} and has a burst time of {job.getBurstTime()}")
                 else:
                     not_ready_jobs.append(job)
             self.available_jobs = not_ready_jobs
-            return self.ready_queue.getQueueList()
-        else:
-            print("No available jobs to schedule.")
+            for i in range(len(new_ready_jobs) - 1):
+                if new_ready_jobs[i].getArrivalTime() > new_ready_jobs[i+1].getArrivalTime():
+                    temp = new_ready_jobs[i]
+                    new_ready_jobs[i] = new_ready_jobs[i+1]
+                    new_ready_jobs[i+1] = temp
+            for process in new_ready_jobs:
+                self.ready_queue.addProcess(process)
+                print(f"Job {process.getProgramNumber()} added to ready queue")   
+        return self.ready_queue.getQueueList()
+            
     
     def fetchNextProcess(self) -> Pcb | None:
         return self.ready_queue.removeFirstProcess()
@@ -35,3 +42,12 @@ class Scheduler:
         else:
             self.ready_queue.addProcess(process)
             return None
+
+    def isAvailableJobsEmpty(self):
+        if len(self.available_jobs) == 0:
+            return True
+        else:
+            return False
+        
+    def getAvailableProcessList(self):
+        return self.available_jobs
