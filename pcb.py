@@ -24,6 +24,9 @@ class Pcb:
     def getBurstTime(self):
         return self.burst_time
 
+    def getCurrentState(self):
+        return self.current_state
+    
     def changeState(self, state):
         if state == Pcb.READY:
             self.current_state = Pcb.READY

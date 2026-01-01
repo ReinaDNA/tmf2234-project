@@ -1,5 +1,5 @@
 from pcb import Pcb
-from queues import ReadyQueue
+from scheduler import Scheduler
 class CPU:
     BUSY = "Busy"
     IDLE = "Idle"
@@ -9,8 +9,11 @@ class CPU:
         self.current_process : Pcb = None
         self.state = CPU.IDLE
 
-    def fetchNextProcess(self, queue:ReadyQueue):
-        self.current_process = queue.fetchNextProcess()
+    def getCurrentProcess(self) -> Pcb | None:
+        return self.current_process
+
+    def fetchNextProcess(self, scheduler:Scheduler):
+        self.current_process = scheduler.fetchNextProcess()
     
     def checkIsIdle(self):
         if self.state == CPU.IDLE:
@@ -20,19 +23,24 @@ class CPU:
         
     def executeProcess(self):
         if self.current_process is not None:
+            process_burst_time = self.current_process.getBurstTime()
             self.state = CPU.BUSY
-            self.current_process.changeState(Pcb.RUNNING)
-            required_time = self.current_process.getBurstTime()
-            if required_time < self.time_quantum:
+            execution_time = min(process_burst_time, self.time_quantum)
+            remaining_burst_time = process_burst_time - execution_time
+            if remaining_burst_time > 0:
+                self.current_process.setBurstTime(remaining_burst_time)
+                self.current_process.changeState(Pcb.READY)
+                self.state = CPU.IDLE
+                print("Process Executed")
+                return execution_time
+            elif remaining_burst_time == 0:
                 self.current_process.markAsComplete()
                 self.state = CPU.IDLE
                 print("Process Executed.")
-                return required_time
+                return execution_time
             else:
-                remaining_burst_time = self.current_process.getBurstTime() - self.time_quantum
-                self.current_process.setBurstTime(remaining_burst_time)
-                self.current_process.changeState(Pcb.READY)
-                print("Process Executed.")
-                return self.time_quantum
+                print("An error occured. Exiting Execution Process.")
+                
         else:
             print("Error, CPU does not hold a process.")
+            
