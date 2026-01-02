@@ -10,7 +10,8 @@ class Pcb:
         # self.arrival_time = randint(0,100) #Program arrival times are randomly generated between 0 and 100ms.
         # self.burst_time = randint(5,50) #Program burst times are randomly generated between 5 and 50ms.
         self.arrival_time = arrival
-        self.burst_time = burst 
+        self.burst_time = burst
+        self.initial_burst_time = self.burst_time # Variable used to calculate waiting time afterwards. 
         self.start_time = 0 #Time when the program starts getting processed.
         self.finish_time = 0
         self.turnaround_time = 0
@@ -29,6 +30,15 @@ class Pcb:
     def getCurrentState(self):
         return self.current_state
     
+    def getFinishTime(self):
+        return self.finish_time    
+    
+    def getTurnaroundTime(self):
+        return self.turnaround_time  
+
+    def getWaitingTime(self):
+        return self.waiting_time  
+
     def changeState(self, state):
         if state == Pcb.READY:
             self.current_state = Pcb.READY
@@ -46,3 +56,11 @@ class Pcb:
     def setBurstTime(self, newBurst):
         self.burst_time = newBurst
         
+    def setFinishTime(self, finish):
+        self.finish_time = finish
+
+    def setTurnaroundTime(self):
+        self.turnaround_time = self.finish_time - self.arrival_time
+    
+    def setWaitingTime(self):
+        self.waiting_time = self.turnaround_time - self.initial_burst_time

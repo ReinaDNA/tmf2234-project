@@ -25,6 +25,7 @@ class CPU:
         if self.current_process is not None:
             process_burst_time = self.current_process.getBurstTime()
             self.state = CPU.BUSY
+            self.current_process.changeState(Pcb.RUNNING)
             execution_time = min(process_burst_time, self.time_quantum)
             remaining_burst_time = process_burst_time - execution_time
             if remaining_burst_time > 0:

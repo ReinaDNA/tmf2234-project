@@ -17,6 +17,7 @@ class Scheduler:
                     not_ready_jobs.append(job)
             self.available_jobs = not_ready_jobs
             for process in new_ready_jobs:
+                process.changeState(Pcb.READY)
                 self.ready_queue.addProcess(process)
                 # print(f"Job {process.getProgramNumber()} added to ready queue")   
         return self.ready_queue.getQueueList()
@@ -30,8 +31,9 @@ class Scheduler:
         else:
             return False        
 
-    def checkExecutedProcess(self, process:Pcb):
+    def checkExecutedProcess(self, process:Pcb, time):
         if process.getCurrentState() == Pcb.COMPLETED:
+            process.setFinishTime(time)
             return process
         else:
             self.ready_queue.addProcess(process)
