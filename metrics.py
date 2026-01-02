@@ -3,6 +3,16 @@ from pcb import Pcb
 class Metrics:
     def __init__(self):
         self.completed_processes: list[Pcb] = []
+        self.context_switch = 0
+
+    def countContextSwitch(self):
+        self.context_switch = self.context_switch + 1
+
+    def getContextSwitchCount(self):
+        return self.context_switch
+    
+    def getCPUOverhead(self):
+        return self.context_switch*1.0
 
     def addCompletedProcess(self, newProcess):
         self.completed_processes.append(newProcess)

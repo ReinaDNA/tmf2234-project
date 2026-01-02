@@ -47,6 +47,7 @@ def main():
             available_job = scheduler.filterAvailableProcess(time)
             executed_process = scheduler.checkExecutedProcess(cpu.getCurrentProcess(), time)
             time = time + CONTEXT_SWITCH # A context switch occurs after the executeProcess() function.
+            metrics.countContextSwitch()
             if executed_process:
                 metrics.addCompletedProcess(executed_process)
                 print(f"Program #{cpu.current_process.getProgramNumber()} completed.")
@@ -60,7 +61,9 @@ def main():
         # for process in scheduler.ready_queue.getQueueList():
         #     print(process.getProgramNumber())
     metrics.calculateMetrics()
-    print(f"Average Turnaround Time: {metrics.calculateAverageTurnaroundTime()}")
-    print(f"Average Waiting Time: {metrics.calculateAverageWaitingTime()}")
+    print(f"Average Turnaround Time: {metrics.calculateAverageTurnaroundTime()}ms")
+    print(f"Average Waiting Time: {metrics.calculateAverageWaitingTime()}ms")
+    print(f"Total Number of Context Switches: {metrics.getContextSwitchCount()}")
+    print(f"Total CPU Overhead caused By Context Switching: {metrics.getCPUOverhead()}ms")
 
 main()
