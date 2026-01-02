@@ -23,9 +23,3 @@ class ReadyQueue:
         else:
             return False
 
-class CompletedQueue:
-    def __init__(self):
-        self.completed_list: list[Pcb] = []
-
-    def addProcess(self, newProcess:Pcb):
-        self.completed_list.append(newProcess)

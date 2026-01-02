@@ -25,19 +25,20 @@ class CPU:
         if self.current_process is not None:
             process_burst_time = self.current_process.getBurstTime()
             self.state = CPU.BUSY
+            self.current_process.changeState(Pcb.RUNNING)
             execution_time = min(process_burst_time, self.time_quantum)
             remaining_burst_time = process_burst_time - execution_time
             if remaining_burst_time > 0:
                 self.current_process.setBurstTime(remaining_burst_time)
                 self.current_process.changeState(Pcb.READY)
                 self.state = CPU.IDLE
-                print(f"burst remaining for {self.current_process.getProgramNumber()}: {self.current_process.getBurstTime()}")
-                print("Process Executed")
+                # print(f"burst remaining for {self.current_process.getProgramNumber()}: {self.current_process.getBurstTime()}")
+                # print("Process Executed")
                 return execution_time
             elif remaining_burst_time == 0:
                 self.current_process.markAsComplete()
                 self.state = CPU.IDLE
-                print("Process Executed.")
+                print("Process Completed.")
                 return execution_time
             else:
                 print("An error occured. Exiting Execution Process.")
