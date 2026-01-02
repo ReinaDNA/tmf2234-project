@@ -31,13 +31,13 @@ class CPU:
                 self.current_process.setBurstTime(remaining_burst_time)
                 self.current_process.changeState(Pcb.READY)
                 self.state = CPU.IDLE
-                print(f"burst remaining for {self.current_process.getProgramNumber()}: {self.current_process.getBurstTime()}")
-                print("Process Executed")
+                # print(f"burst remaining for {self.current_process.getProgramNumber()}: {self.current_process.getBurstTime()}")
+                # print("Process Executed")
                 return execution_time
             elif remaining_burst_time == 0:
                 self.current_process.markAsComplete()
                 self.state = CPU.IDLE
-                print("Process Executed.")
+                print("Process Completed.")
                 return execution_time
             else:
                 print("An error occured. Exiting Execution Process.")

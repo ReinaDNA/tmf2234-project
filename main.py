@@ -3,12 +3,32 @@ from CPU import CPU
 from queues import CompletedQueue
 from scheduler import Scheduler
 TIME_QUANTUM = 3
+def sortProcessByArrivalTime(process_list:list[Pcb]):
+    #Simple bubble sort function 
+    #Sorting the processes by arrival time as it is randomly generated per process.
+    n = len(process_list)
+    for i in range(n):
+        swapped = False
+        for process in range(0, n-i-1):
+            if process_list[process].getArrivalTime() > process_list[process+1].getArrivalTime():
+                process_list[process], process_list[process+1] = process_list[process+1], process_list[process]
+                swapped = True
+        if not swapped:
+            break
+        
 #Generate 100 dummy data for simulation.
 def dummyGenerator() -> list[Pcb] | None:
     job_list: list[Pcb] = []
-    for i in range(5):
-        job_list.append(Pcb(i+1))
+    
+    job_list.append(Pcb(1, 5, 15))
+    job_list.append(Pcb(2, 8, 21))
+    job_list.append(Pcb(3, 14, 23))
+    job_list.append(Pcb(4, 9, 27))
+    job_list.append(Pcb(5, 30, 44))
+    sortProcessByArrivalTime(job_list)
     return job_list
+
+
 
 def main():
     #Universal clock timer
@@ -20,12 +40,12 @@ def main():
     # print(scheduler.ready_queue.isEmpty(),len(scheduler.getAvailableProcessList()),cpu.checkIsIdle())
     while not (scheduler.ready_queue.isEmpty() and len(scheduler.getAvailableProcessList()) == 0):
         # print(scheduler.ready_queue.isEmpty(),len(scheduler.getAvailableProcessList()),cpu.checkIsIdle())
-    # while count < 30:
         available_job = scheduler.filterAvailableProcess(time)
         if available_job and cpu.checkIsIdle():
             cpu.fetchNextProcess(scheduler)
             processing_time = cpu.executeProcess()
             time = time + processing_time
+            available_job = scheduler.filterAvailableProcess(time)
             executed_process = scheduler.checkExecutedProcess(cpu.getCurrentProcess())
             if executed_process:
                 completed.addProcess(executed_process)
@@ -36,9 +56,8 @@ def main():
             time = time + 1
 
         print(f"The time now is {time}ms")
-        for process in scheduler.ready_queue.getQueueList():
-            print(process.getProgramNumber())
-        if time > 150:
-            break
+        # for process in scheduler.ready_queue.getQueueList():
+        #     print(process.getProgramNumber())
+        
 
 main()

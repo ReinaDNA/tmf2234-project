@@ -5,10 +5,12 @@ class Pcb:
     READY = "Ready"
     RUNNING = "Running"
     COMPLETED = "Completed"
-    def __init__(self, number):
+    def __init__(self, number, arrival, burst):
         self.program_number = number
-        self.arrival_time = randint(0,100) #Program arrival times are randomly generated between 0 and 100ms.
-        self.burst_time = randint(5,50) #Program burst times are randomly generated between 5 and 50ms.
+        # self.arrival_time = randint(0,100) #Program arrival times are randomly generated between 0 and 100ms.
+        # self.burst_time = randint(5,50) #Program burst times are randomly generated between 5 and 50ms.
+        self.arrival_time = arrival
+        self.burst_time = burst 
         self.start_time = 0 #Time when the program starts getting processed.
         self.finish_time = 0
         self.turnaround_time = 0

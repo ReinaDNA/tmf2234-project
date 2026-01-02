@@ -16,16 +16,10 @@ class Scheduler:
                 else:
                     not_ready_jobs.append(job)
             self.available_jobs = not_ready_jobs
-            for i in range(len(new_ready_jobs) - 1):
-                if new_ready_jobs[i].getArrivalTime() > new_ready_jobs[i+1].getArrivalTime():
-                    temp = new_ready_jobs[i]
-                    new_ready_jobs[i] = new_ready_jobs[i+1]
-                    new_ready_jobs[i+1] = temp
             for process in new_ready_jobs:
                 self.ready_queue.addProcess(process)
-                print(f"Job {process.getProgramNumber()} added to ready queue")   
+                # print(f"Job {process.getProgramNumber()} added to ready queue")   
         return self.ready_queue.getQueueList()
-            
     
     def fetchNextProcess(self) -> Pcb | None:
         return self.ready_queue.removeFirstProcess()
