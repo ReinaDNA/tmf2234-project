@@ -5,18 +5,29 @@ class Pcb:
     READY = "Ready"
     RUNNING = "Running"
     COMPLETED = "Completed"
-    def __init__(self, number, arrival, burst):
+    def __init__(self, number):
         self.program_number = number
-        # self.arrival_time = randint(0,100) #Program arrival times are randomly generated between 0 and 100ms.
-        # self.burst_time = randint(5,50) #Program burst times are randomly generated between 5 and 50ms.
-        self.arrival_time = arrival
-        self.burst_time = burst
+        self.arrival_time = randint(0,100) #Program arrival times are randomly generated between 0 and 100ms.
+        self.burst_time = randint(5,50) #Program burst times are randomly generated between 5 and 50ms.
         self.initial_burst_time = self.burst_time # Variable used to calculate waiting time afterwards. 
-        self.start_time = 0 #Time when the program starts getting processed.
         self.finish_time = 0
         self.turnaround_time = 0
         self.waiting_time = 0
         self.current_state = Pcb.NEW
+
+    def markAsComplete(self):
+        self.burst_time = 0
+        self.changeState(Pcb.COMPLETED)
+
+    def changeState(self, state):
+        if state == Pcb.READY:
+            self.current_state = Pcb.READY
+        elif state == Pcb.RUNNING:
+            self.current_state = Pcb.RUNNING
+        elif state == Pcb.COMPLETED:
+            self.current_state = Pcb.COMPLETED
+        else:
+            print("Error, invalid state.")
 
     def getProgramNumber(self):
         return self.program_number
@@ -39,19 +50,7 @@ class Pcb:
     def getWaitingTime(self):
         return self.waiting_time  
 
-    def changeState(self, state):
-        if state == Pcb.READY:
-            self.current_state = Pcb.READY
-        elif state == Pcb.RUNNING:
-            self.current_state = Pcb.RUNNING
-        elif state == Pcb.COMPLETED:
-            self.current_state = Pcb.COMPLETED
-        else:
-            print("Error, invalid state.")
-    
-    def markAsComplete(self):
-        self.burst_time = 0
-        self.changeState(Pcb.COMPLETED)
+   
 
     def setBurstTime(self, newBurst):
         self.burst_time = newBurst

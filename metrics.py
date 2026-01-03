@@ -18,29 +18,33 @@ class Metrics:
         self.completed_processes.append(newProcess)
 
     def calculateMetrics(self):
-        print("\n=== Results for each Process ===\n")
+        # print("\n=== Results for each Process ===\n")
         self.sortProcessByProgramNumber(self.completed_processes)
         for process in self.completed_processes:
             process.setTurnaroundTime()
             process.setWaitingTime()
-            print(f"Program #{process.getProgramNumber()}\n")
-            print(f"Finish time: {process.getFinishTime()}ms\n")
-            print(f"Turnaround time: {process.getTurnaroundTime()}ms\n")
-            print(f"Waiting time: {process.getWaitingTime()}ms\n")
+            # print(f"Program #{process.getProgramNumber()}\n")
+            # print(f"Finish time: {process.getFinishTime()}ms\n")
+            # print(f"Turnaround time: {process.getTurnaroundTime()}ms\n")
+            # print(f"Waiting time: {process.getWaitingTime()}ms\n")
 
+    def displaySystemMetrics(self):
+        self.calculateMetrics()
+        print(f"Average Turnaround Time: {self.calculateAverageTurnaroundTime()}ms")
+        print(f"Average Waiting Time: {self.calculateAverageWaitingTime()}ms")
+        print(f"Total Number of Context Switches: {self.getContextSwitchCount()}")
+        print(f"Total CPU Overhead caused By Context Switching: {self.getCPUOverhead()}ms")
 
     def calculateAverageWaitingTime(self):
         total = 0
         for process in self.completed_processes:
             total = total + process.getWaitingTime()
-        print(f"There are {len(self.completed_processes)} in the list.")
         return (total/len(self.completed_processes))
      
     def calculateAverageTurnaroundTime(self):
         total = 0
         for process in self.completed_processes:
             total = total + process.getTurnaroundTime()
-        print(f"There are {len(self.completed_processes)} in the list.")
         return (total/len(self.completed_processes))
 
     def sortProcessByProgramNumber(self, process_list:list[Pcb]):
