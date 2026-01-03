@@ -23,10 +23,10 @@ class Metrics:
         for process in self.completed_processes:
             process.setTurnaroundTime()
             process.setWaitingTime()
-            # print(f"Program #{process.getProgramNumber()}\n")
-            # print(f"Finish time: {process.getFinishTime()}ms\n")
-            # print(f"Turnaround time: {process.getTurnaroundTime()}ms\n")
-            # print(f"Waiting time: {process.getWaitingTime()}ms\n")
+            print(f"Program #{process.getProgramNumber()}\n")
+            print(f"Finish time: {process.getFinishTime()}ms\n")
+            print(f"Turnaround time: {process.getTurnaroundTime()}ms\n")
+            print(f"Waiting time: {process.getWaitingTime()}ms\n")
 
     def displaySystemMetrics(self):
         self.calculateMetrics()

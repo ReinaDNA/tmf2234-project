@@ -63,8 +63,14 @@ def roundRobin(time_quantum):
     metrics.displaySystemMetrics()
 
 def main():
-    roundRobin(SMALL_TIME_QUANTUM)
-    roundRobin(MEDIUM_TIME_QUANTUM)
-    roundRobin(LARGE_TIME_QUANTUM)
+    choice= input("Enter 1 for small time quantum, 2 for medium time quantum, 3 for large time quantum: ")
+    if choice == "1":
+        roundRobin(SMALL_TIME_QUANTUM)
+    elif choice == "2":
+        roundRobin(MEDIUM_TIME_QUANTUM)
+    elif choice == "3":
+        roundRobin(LARGE_TIME_QUANTUM)
+    else:
+        print("Invalid choice.")
 
 main()
