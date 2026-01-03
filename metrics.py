@@ -1,24 +1,21 @@
 from pcb import Pcb
 
 class Metrics:
+    # Constructor
     def __init__(self):
         self.completed_processes: list[Pcb] = []
         self.context_switch = 0
 
+    # Simple counter for context switch, used for analysis.
     def countContextSwitch(self):
         self.context_switch = self.context_switch + 1
 
-    def getContextSwitchCount(self):
-        return self.context_switch
-    
-    def getCPUOverhead(self):
-        return self.context_switch*1.0
-
+    # Inserts completed processes into the queue.
     def addCompletedProcess(self, newProcess):
         self.completed_processes.append(newProcess)
 
+    # Calculates metrics for each program
     def calculateMetrics(self):
-        # print("\n=== Results for each Process ===\n")
         self.sortProcessByProgramNumber(self.completed_processes)
         for process in self.completed_processes:
             process.setTurnaroundTime()
@@ -28,6 +25,8 @@ class Metrics:
             print(f"Turnaround time: {process.getTurnaroundTime()}ms\n")
             print(f"Waiting time: {process.getWaitingTime()}ms\n")
 
+    # WARNING: this function won't work without calling calculateMetrics()
+    # Displays system metrics
     def displaySystemMetrics(self):
         self.calculateMetrics()
         print(f"Average Turnaround Time: {self.calculateAverageTurnaroundTime()}ms")
@@ -35,6 +34,7 @@ class Metrics:
         print(f"Total Number of Context Switches: {self.getContextSwitchCount()}")
         print(f"Total CPU Overhead caused By Context Switching: {self.getCPUOverhead()}ms")
 
+    # Calculations of metrics
     def calculateAverageWaitingTime(self):
         total = 0
         for process in self.completed_processes:
@@ -59,3 +59,10 @@ class Metrics:
                     swapped = True
             if not swapped:
                 break
+
+    # Getters
+    def getContextSwitchCount(self):
+        return self.context_switch
+    
+    def getCPUOverhead(self):
+        return self.context_switch*1.0

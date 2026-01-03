@@ -3,6 +3,7 @@ from CPU import CPU
 from scheduler import Scheduler
 from metrics import Metrics
 
+# System wide constants
 SMALL_TIME_QUANTUM = 3
 MEDIUM_TIME_QUANTUM = 10
 LARGE_TIME_QUANTUM = 25
@@ -15,10 +16,12 @@ def sortProcessByArrivalTime(process_list:list[Pcb]):
     for i in range(n):
         swapped = False
         for process in range(0, n-i-1):
+            # Double loop to check sequence in ascending order
             if process_list[process].getArrivalTime() > process_list[process+1].getArrivalTime():
                 process_list[process], process_list[process+1] = process_list[process+1], process_list[process]
                 swapped = True
         if not swapped:
+            # Loop breaks early if no swap occurs (smaller value, already in correct sequence)
             break
 
 #Generate 100 dummy data for simulation.
@@ -27,42 +30,47 @@ def dummyGenerator() -> list[Pcb] | None:
     for i in range(100):
         new_process = Pcb(i+1)
         process_list.append(new_process)
-    sortProcessByArrivalTime(process_list)
+    sortProcessByArrivalTime(process_list) # Sorts the processes by arrival time to ease simulation
     return process_list
 
 def roundRobin(time_quantum):
-    #Universal clock timer
+    # Universal clock timer
     time = 0
-    process_list = dummyGenerator()
-    metrics = Metrics()
-    cpu = CPU(time_quantum)
-    scheduler = Scheduler(process_list)
+    # Initialize simulation required components
+    process_list = dummyGenerator() # Available job list
+    metrics = Metrics() # Statistics calculator
+    cpu = CPU(time_quantum) # CPU 
+    scheduler = Scheduler(process_list) # Scheduler
+    # While there are still remaining cpu cycles
     while not (scheduler.ready_queue.isEmpty() and len(scheduler.getAvailableProcessList()) == 0 and cpu.checkIsIdle()):
+        # Scheduler checks arrival of processes
         available_process = scheduler.filterAvailableProcess(time)
         if available_process and cpu.checkIsIdle():
+            # CPU fetches process from scheduler and executes
             cpu.fetchNextProcess(scheduler)
             processing_time = cpu.executeProcess()
+            # CPU finishes process, time leaping 
             time = time + processing_time
+            # Scheduler checks for new arrival of processes during the time leap
             available_process = scheduler.filterAvailableProcess(time)
+            # Scheduler decides where to place the executed process
             executed_process = scheduler.checkExecutedProcess(cpu.getCurrentProcess(), time)
-            time = time + CONTEXT_SWITCH # A context switch occurs after the executeProcess() function.
-            metrics.countContextSwitch()
+            # Context switch penalty applies for completed/preempted process (guaranteed since CPU already handles it)
+            time = time + CONTEXT_SWITCH 
+            metrics.countContextSwitch() # Counting number of context switches
             if executed_process:
+                # Process is added to completed queue 
                 metrics.addCompletedProcess(executed_process)
-                # print(f"Program #{cpu.current_process.getProgramNumber()} completed.")
-            else:
-                # print(f"Program #{cpu.current_process.getProgramNumber()} preempted.")
-                pass
+            
         else:
-            # print("Don't have jobs available, forwarding time...")
+            # No available jobs, advance time.
             time = time + 1
 
-        # print(f"The time now is {time}ms")
-
-    # metrics.calculateMetrics()
+    # Display system statistics
     metrics.displaySystemMetrics()
 
 def main():
+    # Decide which simulation to run
     choice= input("Enter 1 for small time quantum, 2 for medium time quantum, 3 for large time quantum: ")
     if choice == "1":
         roundRobin(SMALL_TIME_QUANTUM)
